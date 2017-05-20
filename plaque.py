@@ -14,6 +14,9 @@ __version__ = "0.0.0.1"
 __credits__ = ""
 
 class Plaque:
+    """
+    encapsule les fonctions du module.
+    """
     def __init__(self, chaine="", numero=-1):
         if(numero != -1):
             self.numero = numero
@@ -21,12 +24,19 @@ class Plaque:
         elif(chaine != ""):
             if(not chk(chaine)):
                 raise Exception("La chaine '%s' ne semble pas valide" % (chaine))
-            self.chaine = chaine
+            self.chaine = net(chaine)
             self.numero = plaque2int(chaine)
         else:
             raise RuntimeError("impossible de contruire une plaque sans numero ni chaine !")
     def __repr__(self):
         return self.chaine
+
+def net(s):
+    """
+    nettoie la chaine afin d'etre decodee
+    """
+    return s.replace(":", "", 2)
+
 """
 Permet d'identifier un double de lettre sur la plaque
 """
@@ -34,8 +44,9 @@ LETTRES = re.compile(r"[A-Z]{2}")
 
 def chk(s):
     """
-    verifie que la plaque a decoder est correcte.
+    Verifie que la plaque a decoder est correcte.
     """
+    s = net(s)
     if(len(s) != 7):
         return False
     if(re.match(LETTRES, s[0:2]) is None):
@@ -98,7 +109,7 @@ def information():
     print("NA:010:AA->%d" % (plaque2int("NA:010:AA")))
 
 #information()
-p = Plaque(chaine="AA123AA")
+p = Plaque(chaine="AA:123:AA")
 print(p)
 p = Plaque(numero=99999)
 print(p)
